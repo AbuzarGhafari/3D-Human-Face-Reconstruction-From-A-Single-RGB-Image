@@ -1,8 +1,8 @@
-function draw2DFace(pt2d)
+function draw2DFace(pt2d, t)
 x = pt2d(1,:);
 y = pt2d(2,:);
 
-figure;
+% figure;
 hold on;
 % face
 draw2DLine(x, y, 1, 17, 'red');
@@ -27,9 +27,9 @@ draw2DLineCircle(x, y, 49, 68, 'blue');
 %               'LineWidth',1.5);
 
 % Add a title to the plot
-title('2D Face');
+title(t);
 
-% axis off;
+axis off;
 grid on;
 hold off; 
 end
