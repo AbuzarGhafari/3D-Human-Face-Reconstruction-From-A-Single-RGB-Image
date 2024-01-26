@@ -1,5 +1,6 @@
 function [fileNames] = getDatasetFiles(datasetPath)
 
+disp(datasetPath)
 % Use the dir function to list files in the directory
 fileList = dir(datasetPath);
 

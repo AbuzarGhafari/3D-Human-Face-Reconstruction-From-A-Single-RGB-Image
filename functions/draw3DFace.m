@@ -1,5 +1,7 @@
-function draw3DFace(pt3d)
-figure;
+function draw3DFace(pt3d, windowTitle)
+
+figure('Name',windowTitle); 
+
 hold on;
 
 % face

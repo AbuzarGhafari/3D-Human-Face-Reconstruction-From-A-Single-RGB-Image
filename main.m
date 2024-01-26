@@ -9,7 +9,15 @@ rehash;
 
 %% Global Variables
 
+dataset_size = 3837;
+
 dataset_path = '3d_dataset/';
+
+projected_dataset_path = 'projected_2d_dataset/';
+
+dataset_sub_directories = ["AFW", "HELEN", "IBUG", "LFPW"];
+
+working_sub_dir = 2;
 
 landmarks_count = 68;
 
@@ -18,59 +26,56 @@ endAngle = 360;
 interval = 30;
 
 angles = linspace(startAngle, endAngle, (endAngle - startAngle) / interval + 1);
+
 angles = angles(1:end-1);
 
+directions = ['x', 'y', 'z'];
 
 %% Load Dataset
 
-fileNames = getDatasetFiles(dataset_path);
+path = join([dataset_path, dataset_sub_directories(working_sub_dir), "/"], '');
 
+fileNames = getDatasetFiles(path);
 
 %% Load Model
 
 load('model/Model_Shape_Sim.mat');
 
-
-%% Sample Image
-
-sample_name = [dataset_path, cell2mat(fileNames(2))]; 
-
-
-load(sample_name);
-
-%% 3D Points
-
-pt3d = Fitted_Face(:, keypoints);
- 
-
-%% Apply Perpective Projection on Face 3D Points
-
-data2d = [];
-
-for angle = 1:numel(angles)
+  
+%% List all the files
+for fileIndex = 1:numel(fileNames)
     
-    pt2d = [];
+    disp(fileIndex);
     
-    for index = 1:landmarks_count
-
-        point_3d = [pt3d(1, index), pt3d(2, index), pt3d(3, index), 1];
-    
-        point_2d = conv3Dto2D(point_3d, angles(angle), 'z');
-
-        pt2d = [pt2d, [point_2d(1); point_2d(2)]];        
+    % Sample Image
+    sample_name = cell2mat(fileNames(fileIndex));    
+    sample_path = [dataset_path, dataset_sub_directories(working_sub_dir), "/", sample_name];  
+    sample_path = join(sample_path, '')
+    load(sample_path);
         
-    end
+    % 3D Points
+    pt3d = Fitted_Face(:, keypoints);
     
-    data2d = [data2d; {pt2d}];
+    % Apply Projection on 3D
+    projections_2d_data = perspectiveProjection(pt3d, directions, angles, landmarks_count);    
 
-end 
+    % Save into mat file
+    sample_path = [projected_dataset_path, dataset_sub_directories(working_sub_dir), "/", sample_name];  
+    sample_path = join(sample_path, '');
+    save(sample_path,"projections_2d_data")
+end
+
+return;
 
 %% Plot  
 
-draw3DFace(pt3d)
- 
-figure;
-for p = 1:numel(data2d)
-    subplot(3, 4, p);
-    draw2DFace(data2d{p}, [num2str(angles(p)), ' angle']);
-end 
+visualizeData(keypoints, ...
+                dataset_path, ...
+                projected_dataset_path, ...
+                dataset_sub_directories, ...
+                working_sub_dir, ...
+                directions, ...
+                angles, ...
+                120);
+
+
