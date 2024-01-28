@@ -11,13 +11,22 @@ rehash;
 
 dataset_size = 3837;
 
+global dataset_path ...
+        projected_dataset_path ...
+        dataset_sub_directories ...
+        working_sub_dir ...
+        landmarks_count ...
+        angles ...
+        directions ...
+        face_midpoint_index;
+
 dataset_path = '3d_dataset/';
 
 projected_dataset_path = 'projected_2d_dataset/';
 
 dataset_sub_directories = ["AFW", "HELEN", "IBUG", "LFPW"];
 
-working_sub_dir = 2;
+working_sub_dir = 3;
 
 landmarks_count = 68;
 
@@ -30,6 +39,8 @@ angles = linspace(startAngle, endAngle, (endAngle - startAngle) / interval + 1);
 angles = angles(1:end-1);
 
 directions = ['x', 'y', 'z'];
+
+face_midpoint_index = 31;
 
 %% Load Dataset
 
@@ -57,25 +68,21 @@ for fileIndex = 1:numel(fileNames)
     pt3d = Fitted_Face(:, keypoints);
     
     % Apply Projection on 3D
-    projections_2d_data = perspectiveProjection(pt3d, directions, angles, landmarks_count);    
-
+    projections_2d_data = perspectiveProjection(pt3d);
+    
     % Save into mat file
     sample_path = [projected_dataset_path, dataset_sub_directories(working_sub_dir), "/", sample_name];  
     sample_path = join(sample_path, '');
     save(sample_path,"projections_2d_data")
+     
+    
 end
 
 return;
 
 %% Plot  
 
-visualizeData(keypoints, ...
-                dataset_path, ...
-                projected_dataset_path, ...
-                dataset_sub_directories, ...
-                working_sub_dir, ...
-                directions, ...
-                angles, ...
-                120);
+clc;
+visualizeData(keypoints, 2);
 
 

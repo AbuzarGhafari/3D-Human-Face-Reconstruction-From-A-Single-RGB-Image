@@ -1,6 +1,15 @@
-function [projections_2d_data] = perspectiveProjection(pt3d, directions, angles, landmarks_count)
+function [projections_2d_data] = perspectiveProjection(pt3d)
     % Apply Perspective Projection on Face 3D Points
-
+    
+    global directions ...
+            angles ...
+            landmarks_count ...
+            face_midpoint_index;
+         
+    translation = [-pt3d(1, face_midpoint_index); ...
+                    -pt3d(2, face_midpoint_index); ...
+                    -pt3d(3, face_midpoint_index)];
+     
     projections_2d_data = [];
 
     for direction = 1:numel(directions)   
@@ -15,7 +24,7 @@ function [projections_2d_data] = perspectiveProjection(pt3d, directions, angles,
 
                 point_3d = [pt3d(1, index), pt3d(2, index), pt3d(3, index), 1];
 
-                point_2d = conv3Dto2D(point_3d, angles(angle), directions(direction));
+                point_2d = conv3Dto2D(point_3d, angles(angle), directions(direction), translation);
 
                 pt2d = [pt2d, [point_2d(1); point_2d(2)]];        
 

@@ -16,6 +16,18 @@ draw2DLine(x, y, 23, 27, 'black');
 
 % Nose 
 draw2DLine(x, y, 28, 36, 'blue');
+
+
+nose_index = 31;
+scatter(pt2d(1,nose_index),...
+            pt2d(2,nose_index),... 
+            'MarkerEdgeColor',"r", ...
+            'MarkerFaceColor',"k",...
+            'LineWidth',1);
+        
+% Add the label to the plot
+% text(pt2d(1,nose_index), pt2d(2,nose_index), num2str([pt2d(1,nose_index), pt2d(2,nose_index)]), 'FontSize', 12, 'FontWeight', 'bold');
+
  
 % Left Eye
 draw2DLineCircle(x, y, 37, 42, 'black');
