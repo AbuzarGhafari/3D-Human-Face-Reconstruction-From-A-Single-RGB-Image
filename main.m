@@ -24,9 +24,10 @@ dataset_path = '3d_dataset/';
 
 projected_dataset_path = 'projected_2d_dataset/';
 
+% %                         337,    2330,   135,    1035
 dataset_sub_directories = ["AFW", "HELEN", "IBUG", "LFPW"];
 
-working_sub_dir = 3;
+working_sub_dir = 4;
 
 landmarks_count = 68;
 
@@ -83,6 +84,31 @@ return;
 %% Plot  
 
 clc;
-visualizeData(keypoints, 2);
+
+visualizeData(2);
+
+
+%% Nearest Neighbours
+
+source_img = getSampleImage3D(3);
+
+source_img_pt2d = [source_img(1, :); source_img(2, :) ];
+
+lastKMinDistances = getNearestNeighbours(100, source_img_pt2d);
+
+disp('lastKMinDistances');
+
+disp(lastKMinDistances);
+
+ 
+
+
+%% Test
+
+lastKMinDistances(1,:);
+lastKMinDistances(1,2); 
+load(lastKMinDistances{2,2}{1})
+figure;
+draw2DFace(projections_2d_data{1}, "projections 2d data");
 
 

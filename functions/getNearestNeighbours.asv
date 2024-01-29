@@ -1,0 +1,72 @@
+function [lastKMinDistances] = getNearestNeighbours(k, testImage)
+
+    global dataset_path ...
+        projected_dataset_path ...
+        dataset_sub_directories ...
+        angles ...
+        directions;
+
+%     source_img = getSampleImage3D(3);
+%     source_img_pt2d = [source_img(1, :); source_img(2, :) ];
+    source_img_pt2d = testImage;
+
+    image_path = {};
+    distances = [];
+    
+    
+    for sub_dir = 1:numel(dataset_sub_directories)
+        
+        % Load 2D Projected Dataset
+        path = join([projected_dataset_path, dataset_sub_directories(sub_dir), "/"], '');
+
+        fileNames = getDatasetFiles(path); 
+        
+        for file = 1:numel(fileNames)
+
+            % Sample Image
+            sample_name = cell2mat(fileNames(file));    
+            projection_2d_sample_path = [projected_dataset_path, dataset_sub_directories(working_sub_dir), "/", sample_name];  
+            dataset_3d_sample_path = join(projection_2d_sample_path, '')
+            load(sample_path);
+
+        end
+        
+
+        
+        
+    end
+    
+  
+    
+    
+    dataset_img = getSampleImage3D(24);
+    dataset_img_pt2d_projections = getProjectedImage2D(24);
+
+    for direction = 1:numel(directions)
+         
+        data2d = dataset_img_pt2d_projections(:, direction);
+        
+        for p = 1:numel(data2d)
+            
+            image_path{end+1} = 'img1';
+                        
+            distance = euclideanDistance2D(source_img_pt2d, data2d{p});
+            
+            distances = [distances; distance];
+            
+        end  
+        
+    end
+    
+    euclideanDistancesTable = table(image_path', distances);
+
+
+    % Sort the table by 'distances' column in ascending order
+    sortedeuclideanDistancesTable= sortrows(euclideanDistancesTable, 'distances');
+
+    % Get the last k rows (minimum distances)
+    lastKMinDistances = sortedeuclideanDistancesTable(1:k, :);
+    
+    
+end
+

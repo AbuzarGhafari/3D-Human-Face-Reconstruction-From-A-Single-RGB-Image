@@ -1,4 +1,4 @@
-function visualizeData(keypoints, sample)
+function visualizeData(sample)
 
     global dataset_path ...
             projected_dataset_path ...
@@ -6,6 +6,9 @@ function visualizeData(keypoints, sample)
             working_sub_dir ...
             directions ...
             angles;
+       
+    % Load Model
+    load('model/Model_Shape_Sim.mat');
 
     % Load 3D Dataset
     path = join([dataset_path, dataset_sub_directories(working_sub_dir), "/"], '');
