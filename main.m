@@ -1,12 +1,6 @@
 %% Clear
 clc, clearvars, close all;
 
-%% Functions Path
-
-addpath('functions');
-
-rehash;
-
 %% Global Variables
 
 dataset_size = 3837;
@@ -27,7 +21,7 @@ projected_dataset_path = 'projected_2d_dataset/';
 % %                         337,    2330,   135,    1035
 dataset_sub_directories = ["AFW", "HELEN", "IBUG", "LFPW"];
 
-working_sub_dir = 4;
+working_sub_dir = 2;
 
 landmarks_count = 68;
 
@@ -43,64 +37,69 @@ directions = ['x', 'y', 'z'];
 
 face_midpoint_index = 31;
 
-%% Load Dataset
 
-path = join([dataset_path, dataset_sub_directories(working_sub_dir), "/"], '');
+%%
 
-fileNames = getDatasetFiles(path);
-
-%% Load Model
-
-load('model/Model_Shape_Sim.mat');
-
-  
-%% List all the files
-for fileIndex = 1:numel(fileNames)
-    
-    disp(fileIndex);
-    
-    % Sample Image
-    sample_name = cell2mat(fileNames(fileIndex));    
-    sample_path = [dataset_path, dataset_sub_directories(working_sub_dir), "/", sample_name];  
-    sample_path = join(sample_path, '')
-    load(sample_path);
-        
-    % 3D Points
-    pt3d = Fitted_Face(:, keypoints);
-    
-    % Apply Projection on 3D
-    projections_2d_data = perspectiveProjection(pt3d);
-    
-    % Save into mat file
-    sample_path = [projected_dataset_path, dataset_sub_directories(working_sub_dir), "/", sample_name];  
-    sample_path = join(sample_path, '');
-    save(sample_path,"projections_2d_data")
-     
-    
-end
+applyProjectionOn3DLandmarks();
 
 return;
 
 %% Plot  
 
-clc;
+clc; close all;
 
 visualizeData(2);
 
 
 %% Nearest Neighbours
 
-source_img = getSampleImage3D(3);
+clc; close all;
+
+source_img = getSampleImage3D(2145);
+
+% 0 1 Normalize Data
+source_img = zeroOneNormalize3D(source_img);
 
 source_img_pt2d = [source_img(1, :); source_img(2, :) ];
 
-lastKMinDistances = getNearestNeighbours(100, source_img_pt2d);
+k = 20;
 
-disp('lastKMinDistances');
+lastKNearestNeighbours = getNearestNeighbours(k, source_img_pt2d);
 
-disp(lastKMinDistances);
+disp('lastKNearestNeighbours');
+
+disp(lastKNearestNeighbours);
 
  
+% Plot Nearest Neighbours
+% figure;
+draw3DFace(source_img, "Query");
+
+figure('Name', "Nearest Neighbours"); 
+
+for n=1:k    
+    
+    subplot(4, 5, n);
+    
+    load(lastKNearestNeighbours{n,2}{1})
+    
+    draw2DFace(projections_2d_data{1}, "");
+    
+end
+
+
+figure('Name', "Nearest Neighbours"); 
+
+for n=1:k    
+    
+    load(lastKNearestNeighbours{n,2}{1})
+    
+    draw2DFace(projections_2d_data{1}, "");
+    
+end
+
+    
+    
 
 
 %% Test
@@ -111,4 +110,25 @@ load(lastKMinDistances{2,2}{1})
 figure;
 draw2DFace(projections_2d_data{1}, "projections 2d data");
 
+%% 01 Normalization
 
+
+data = getSampleImage3D(2);
+
+draw3DFace(data, "Data");
+
+dataNorm = zeroOneNormalize3D(data);
+disp(dataNorm);
+
+draw3DFace(dataNorm , "Query");
+
+
+%%
+clc; close all; clearvars;
+% Create a sample dataset (replace with your own data)
+data = randn(100, 3); % 100 data points in 3D space
+ 
+
+
+% Create a KDTreeSearcher object
+kdtree = KDTreeSearcher(data);

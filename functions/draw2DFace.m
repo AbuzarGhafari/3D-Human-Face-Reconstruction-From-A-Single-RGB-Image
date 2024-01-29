@@ -50,6 +50,6 @@ set(gcf, 'Color', 'white');
 
 grid on;
  
-axis off;
+% axis off;
 hold off; 
 end

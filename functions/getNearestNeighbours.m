@@ -5,9 +5,7 @@ function [lastKMinDistances] = getNearestNeighbours(k, testImage)
         dataset_sub_directories ...
         angles ...
         directions;
-
-%     source_img = getSampleImage3D(3);
-%     source_img_pt2d = [source_img(1, :); source_img(2, :) ];
+ 
     source_img_pt2d = testImage;
 
     dataset_3d_path = {};
