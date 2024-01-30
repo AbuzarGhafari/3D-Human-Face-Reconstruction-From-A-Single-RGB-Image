@@ -5,7 +5,7 @@ function [pt3d] = normalizeTranslate3D(pt3d)
     
     T = [-pt3d(1, face_midpoint_index); ...
                     -pt3d(2, face_midpoint_index); ...
-                    -pt3d(3, face_midpoint_index)]
+                    -pt3d(3, face_midpoint_index)];
     R = eye(3); 
     
     P = [R, T];

@@ -3,7 +3,7 @@ function draw3DFace(pt3d, windowTitle)
     % Translation Normalization
     pt3d = normalizeTranslate3D(pt3d);
 
-    figure('Name',windowTitle); 
+%     figure('Name',windowTitle); 
 
     hold on;
 

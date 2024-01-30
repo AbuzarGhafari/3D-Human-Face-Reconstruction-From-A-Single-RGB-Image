@@ -14,6 +14,7 @@ function [lastKMinDistances] = getNearestNeighbours(k, testImage)
     angle = {};
     distance = [];
     
+    count = 0;
     
     for sub_dir = 1:numel(dataset_sub_directories)
         
@@ -29,6 +30,7 @@ function [lastKMinDistances] = getNearestNeighbours(k, testImage)
             projection_2d_sample_path = [projected_dataset_path, dataset_sub_directories(sub_dir), "/", sample_name];  
             projection_2d_sample_path = join(projection_2d_sample_path, '');         
             load(projection_2d_sample_path);
+            
             dataset_3d_sample_path = [dataset_path, dataset_sub_directories(sub_dir), "/", sample_name];  
             dataset_3d_sample_path = join(dataset_3d_sample_path, '');         
             
@@ -38,12 +40,16 @@ function [lastKMinDistances] = getNearestNeighbours(k, testImage)
                 data2d = projections_2d_data(:, direct);
 
                 for p = 1:numel(data2d)
+                    
+                    disp(projection_2d_sample_path);
+                    
+                    count = count + 1;
+                    
+                    disp(count);
 
                     dataset_3d_path{end+1} = dataset_3d_sample_path;
                     
-                    projection_2d_path{end+1} = projection_2d_sample_path;
-                    
-                    disp(projection_2d_sample_path);
+                    projection_2d_path{end+1} = projection_2d_sample_path;                    
 
                     direction{end+1} = directions(direct);
                     
@@ -61,9 +67,7 @@ function [lastKMinDistances] = getNearestNeighbours(k, testImage)
           
     end    
     
-%     dataset_img = getSampleImage3D(24);
-%     dataset_img_pt2d_projections = getProjectedImage2D(24);
- 
+    
     dataset_3d_path = dataset_3d_path';
     projection_2d_path = projection_2d_path';
     direction = direction';

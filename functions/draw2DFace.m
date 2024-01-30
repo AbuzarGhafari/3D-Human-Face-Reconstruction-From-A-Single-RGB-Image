@@ -1,4 +1,4 @@
-function draw2DFace(pt2d, t)
+function draw2DFace(pt2d, t, color)
 
 x = pt2d(1,:);
 y = pt2d(2,:);
@@ -7,15 +7,15 @@ y = pt2d(2,:);
 hold on;
 
 % face
-draw2DLine(x, y, 1, 17, 'red');
+draw2DLine(x, y, 1, 17, color);
 
 % Left Eye Brow
-draw2DLine(x, y, 18, 22, 'black');
+draw2DLine(x, y, 18, 22, color);
 % Right Eye Brow
-draw2DLine(x, y, 23, 27, 'black');
+draw2DLine(x, y, 23, 27, color);
 
 % Nose 
-draw2DLine(x, y, 28, 36, 'blue');
+draw2DLine(x, y, 28, 36, color);
 
 
 nose_index = 31;
@@ -30,12 +30,12 @@ scatter(pt2d(1,nose_index),...
 
  
 % Left Eye
-draw2DLineCircle(x, y, 37, 42, 'black');
+draw2DLineCircle(x, y, 37, 42, color);
 % Right Eye
-draw2DLineCircle(x, y, 43, 48, 'black');
+draw2DLineCircle(x, y, 43, 48, color);
   
 % Lips
-draw2DLineCircle(x, y, 49, 68, 'blue');
+draw2DLineCircle(x, y, 49, 68, color);
  
 % Landmark Points
 % scatter(x,y,'MarkerEdgeColor',"r",...
@@ -47,6 +47,9 @@ title(t);
 
 % Set the background color to white
 set(gcf, 'Color', 'white');
+
+% set(gca, 'XDir','reverse');
+set(gca, 'YDir','reverse');
 
 grid on;
  

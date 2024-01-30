@@ -5,6 +5,10 @@ function [projections_2d_data] = perspectiveProjection(pt3d)
             angles ...
             landmarks_count ...
             face_midpoint_index;
+        
+    
+    % Translation Normalization
+    pt3d = normalizeTranslate3D(pt3d);
          
     % 0 1 Normalize Data
     pt3d = zeroOneNormalize3D(pt3d);
@@ -33,13 +37,16 @@ function [projections_2d_data] = perspectiveProjection(pt3d)
 
             end
             
+            % Translation Normalization
+            pt2d = normalizeTranslate2D(pt2d);
             
             % 0 1 Normalize Data
-            pt2d = zeroOneNormalize2D(pt2d);
-
-            data2d = [data2d; {pt2d}];
+            pt2d = zeroOneNormalize2D(pt2d);            
             
+            % Translation Normalization
+            pt2d = normalizeTranslate2D(pt2d);
 
+            data2d = [data2d; {pt2d}];            
 
         end 
 

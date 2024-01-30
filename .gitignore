@@ -6,4 +6,6 @@ projected_2d_dataset/HELEN/
 projected_2d_dataset/LFPW/
 projected_2d_dataset/AFW/ 
 
-main.asv
+2d_dataset/
+
+*.asv
