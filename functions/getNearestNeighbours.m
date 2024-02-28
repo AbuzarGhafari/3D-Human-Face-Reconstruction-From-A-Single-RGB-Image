@@ -34,7 +34,6 @@ function [lastKMinDistances] = getNearestNeighbours(k, testImage)
             dataset_3d_sample_path = [dataset_path, dataset_sub_directories(sub_dir), "/", sample_name];  
             dataset_3d_sample_path = join(dataset_3d_sample_path, '');         
             
-
             for direct = 1:numel(directions)
 
                 data2d = projections_2d_data(:, direct);

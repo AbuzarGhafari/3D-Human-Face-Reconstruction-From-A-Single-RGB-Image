@@ -49,10 +49,10 @@ title(t);
 set(gcf, 'Color', 'white');
 
 % set(gca, 'XDir','reverse');
-set(gca, 'YDir','reverse');
+% set(gca, 'YDir','reverse');
 
 grid on;
  
 % axis off;
-hold off; 
+% hold off; 
 end

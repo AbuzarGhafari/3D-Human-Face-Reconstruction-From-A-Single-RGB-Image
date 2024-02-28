@@ -1,7 +1,5 @@
-function draw3DFace(pt3d, windowTitle)
+function draw3DFace(pt3d, heading)
 
-    % Translation Normalization
-    pt3d = normalizeTranslate3D(pt3d);
 
 %     figure('Name',windowTitle); 
 
@@ -30,13 +28,34 @@ function draw3DFace(pt3d, windowTitle)
     draw3DLineCircle(pt3d, 37, 42, 'black');
     % Right Eye
     draw3DLineCircle(pt3d, 43, 48, 'black');
+    
+    left_eye = pt3d(:, 37: 42);
+    left_eye_mean = mean(left_eye');
+    right_eye = pt3d(:, 43: 48);
+    right_eye_mean = mean(right_eye');
+    
+    
+    scatter3(left_eye_mean(1),...
+                left_eye_mean(2),...
+                left_eye_mean(3),...
+                'MarkerEdgeColor',"k", ...
+                'MarkerFaceColor',"k",...
+                'LineWidth',1);
+
+            
+    scatter3(right_eye_mean(1),...
+                right_eye_mean(2),...
+                right_eye_mean(3),...
+                'MarkerEdgeColor',"k", ...
+                'MarkerFaceColor',"k",...
+                'LineWidth',1);
 
     % Lips
     draw3DLineCircle(pt3d, 49, 68, 'blue');
 
 
     % Add a title to the plot
-    title('3D Face');
+    title(heading);
 
     grid on;
     hold off; 
