@@ -46,7 +46,13 @@ function [projections_2d_data] = perspectiveProjection(pt3d)
                 pt2d = projectFace3D(faceVertices, directions(direction), angles(angle));
             end
                     
+            if ~isempty(pt2d) 
+                % 0 1 Normalize Data
+                pt2d = zeroOneNormalize2D(pt2d')';        
+            end
              
+            
+            
             data2d = [data2d; {pt2d}];            
 
         end 

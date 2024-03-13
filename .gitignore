@@ -2,6 +2,8 @@
 3d_dataset/AFW/
 3d_dataset/LFPW/ 
 
+300W_LP/
+3D_AVG_GT_Compare/
 3d_normalized_images/
 3d_normalized_dataset/
 2d_projected_images/
@@ -16,4 +18,6 @@ projected_2d_dataset/AFW/
 *.asv
 
 *.png
+
+*.mat
 

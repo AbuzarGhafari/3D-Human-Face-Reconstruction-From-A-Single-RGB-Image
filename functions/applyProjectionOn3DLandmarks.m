@@ -14,7 +14,7 @@ function applyProjectionOn3DLandmarks(sub_dir)
         pt3d = getNormalized3DLandmarks(sub_dir, fileIndex);
 
         % Apply Projection on 3D
-        projections_2d_data = perspectiveProjection(pt3d);             
+        projections_2d_data = perspectiveProjection(pt3d);
 
         % Save into mat file
         sample_name = cell2mat(fileNames(fileIndex));  

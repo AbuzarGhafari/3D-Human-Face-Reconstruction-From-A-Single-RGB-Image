@@ -93,6 +93,5 @@ function visualizeData(sub_dir, sample)
     sample_path = join(sample_path, '');
     exportgraphics(combinedfig, sample_path, 'Resolution', 300);
     
-    disp("Done.");
 end
 
