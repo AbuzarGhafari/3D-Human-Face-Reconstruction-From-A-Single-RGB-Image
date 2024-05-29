@@ -1,4 +1,4 @@
-function compare3DFace(gt_pt3d, pt3d )
+function compare3DFace(gt_pt3d, pt3d, t_x )
 
 
 
@@ -108,7 +108,7 @@ function compare3DFace(gt_pt3d, pt3d )
 
 
     % Add a title to the plot
-    title("Avg. & GT Compare 3D Faces");
+    title(t_x);
     
 %     legend('Avg. NN', 'GT'); % Add a legend
 

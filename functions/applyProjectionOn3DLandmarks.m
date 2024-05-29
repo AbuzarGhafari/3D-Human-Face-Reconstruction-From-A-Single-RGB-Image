@@ -1,11 +1,9 @@
 function applyProjectionOn3DLandmarks(sub_dir)
 
-    global dataset_path ...
-        projected_dataset_path ...
-        dataset_sub_directories;
+    global dataset_sub_directories;
 
     % Load Dataset
-    path = join([dataset_path, dataset_sub_directories(sub_dir), "/"], '');
+    path = join(["dataset/3d_dataset_normalized/", dataset_sub_directories(sub_dir), "/"], '');
     fileNames = getDatasetFiles(path);
 
     % List all the files
@@ -18,11 +16,11 @@ function applyProjectionOn3DLandmarks(sub_dir)
 
         % Save into mat file
         sample_name = cell2mat(fileNames(fileIndex));  
-        sample_path = [projected_dataset_path, dataset_sub_directories(sub_dir), "/", sample_name];  
+        sample_path = ["dataset/projected_2d_dataset/", dataset_sub_directories(sub_dir), "/", sample_name];  
         sample_path = join(sample_path, '');
-        save(sample_path,"projections_2d_data")
+        save(sample_path,"projections_2d_data");
         
-        disp(fileIndex);        
+        disp(fileIndex);               
 
     end
     

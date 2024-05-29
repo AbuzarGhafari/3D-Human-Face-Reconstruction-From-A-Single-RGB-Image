@@ -1,7 +1,6 @@
 function visualizeData(sub_dir, sample)
 
-    global projected_dataset_path ...
-            dataset_sub_directories ...
+    global dataset_sub_directories ...
             directions ...
             x_angles ...
             y_angles ...
@@ -15,17 +14,17 @@ function visualizeData(sub_dir, sample)
      
     mainfig = figure('Visible', 'off');
     draw3DFace(pt3d, "Normalized 3D");
-%     path = join(['3d_normalized_images/' dataset_sub_directories(sub_dir) '/' sample_name '.png'], '');
+
     exportgraphics(mainfig, 'mainfig.png', 'Resolution', 300);
            
     % Load 2D Projected Dataset
-    path = join([projected_dataset_path, dataset_sub_directories(sub_dir), "/"], '');
+    path = join(["dataset/projected_2d_dataset/", dataset_sub_directories(sub_dir), "/"], '');
 
     fileNames = getDatasetFiles(path);    
     
     % Sample Image
     sample_name = cell2mat(fileNames(sample));    
-    sample_path = [projected_dataset_path, dataset_sub_directories(sub_dir), "/", sample_name];  
+    sample_path = ["dataset/projected_2d_dataset/", dataset_sub_directories(sub_dir), "/", sample_name];  
     sample_path = join(sample_path, '');
     load(sample_path); 
 
@@ -52,7 +51,7 @@ function visualizeData(sub_dir, sample)
             if (isempty(points) == 0)
                 subplot(rows, columns, plotIndex);             
                 points = points'; 
-                draw2DFace(points, [num2str(angles(p)), ' angle'], 'black'); 
+                draw2DFace(points, [num2str(angles(p)), ' angle']); 
                 plotIndex = plotIndex + 1;
             end
         end 
@@ -89,7 +88,7 @@ function visualizeData(sub_dir, sample)
     set(ax2, 'Position', [0.525, 0.05, 0.45, 0.9]);
 
     
-    sample_path = ["2d_projected_images/", dataset_sub_directories(sub_dir), "/", sample_name, ".png"];  
+    sample_path = ["images/2d_projected_images/", dataset_sub_directories(sub_dir), "/", sample_name, ".png"];  
     sample_path = join(sample_path, '');
     exportgraphics(combinedfig, sample_path, 'Resolution', 300);
     

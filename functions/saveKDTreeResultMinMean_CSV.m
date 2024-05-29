@@ -7,9 +7,7 @@ function saveKDTreeResultMinMean_CSV(summary, path)
     [minDistance, index] = min(distances);
 
     % Retrieve the file name corresponding to the minimum distance
-    minDistanceFile = summary{index, 1};
-    
-    
+    minDistanceFile = summary{index, 1};    
     
     fileID = fopen(path, 'a');    
     

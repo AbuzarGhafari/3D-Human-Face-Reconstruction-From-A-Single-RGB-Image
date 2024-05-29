@@ -1,32 +1,25 @@
-function KDTreeNearestNeighbours(sub_dir, k, p)
+function KDTreeNearestNeighbours(k, p)
 
-    global dataset_sub_directories;   
+    load("mat_files/kd_tree_data.mat");
 
-    load("kd_tree_data.mat");
-
-    parent_dir = "2d_dataset/";
-    path = join([parent_dir, dataset_sub_directories(sub_dir), "/"], '');
-    fileNames = getDatasetFiles(path);
+%     parent_dir = "dataset/AFLW2000/2D_dataset_gt/";
+%     path = join([parent_dir, dataset_sub_directories(sub_dir), "/"], '');
+    fileNames = getDatasetFiles("dataset/AFLW2000/2D_dataset_gt/");
     
-    summary = [];
-    
-    summary_path = ["2d_nearest_neighbours_images/", dataset_sub_directories(sub_dir), "/", "summary", ".csv"];  
-    summary_path = join(summary_path, '');
-
+    summary = [];    
+    summary_path = "images/2d_nearest_neighbours_images/summary.csv";
     summary_file = fopen(summary_path, 'w');     
-    fclose(summary_file);
-    
+    fclose(summary_file);    
 
     for fileIndex = 1:numel(fileNames)
         
         file = cell2mat(fileNames(fileIndex));   
         
         [pathstr, file_name, ext] = fileparts(file);
-
-        image_path = join([parent_dir, dataset_sub_directories(sub_dir) , '/', file_name, '.jpg'], '');
         
-        load(join([parent_dir, dataset_sub_directories(sub_dir) , '/', file_name, '.mat'], ''));
-
+        load(join(["dataset/AFLW2000/2D_dataset_normalized/", file_name, '.mat'], ''));
+        
+        image_path = join(["dataset/AFLW2000/3d_dataset_gt/",file_name, '.jpg'], '');
         img = imread(image_path); 
 
         fig = figure('Name', image_path, 'Visible', 'off');
@@ -40,12 +33,13 @@ function KDTreeNearestNeighbours(sub_dir, k, p)
 %         set(ax1, 'Position', [0.05, 0.65, 0.3, 0.3]);
         title("Test Image");
 
+        pt2d = M;
         subplot(2, 2, 3);
-        draw2DFace(pt2d, '2D Face', 'black'); 
+        draw2DFace(pt2d, '2D Face'); 
         ax2 = gca;
         set(ax2, 'Position', [0.1, 0.05, 0.3, 0.45]);
 
-        Mdl = KDTreeSearcher(kd_tree_data);
+        Mdl = KDTreeSearcher(kdtree);
 
         Y = pt2d(:)';
         [Idx, D] = knnsearch(Mdl, Y, 'K', k);
@@ -55,23 +49,28 @@ function KDTreeNearestNeighbours(sub_dir, k, p)
         
         subplot(2, 2, [2, 4]);
         for i = 1:p
-            v = kd_tree_data(Idx(i), :);
+            v = kdtree(Idx(i), :);
             nearest_pt = reshape(v, 2, 68);               
-            draw2DFace(nearest_pt, "KDTree Nearest Neighbours", 'black');
+            draw2DFace(nearest_pt, "KDTree Nearest Neighbours");
         end
 
-        draw2DFace(pt2d, "", 'red');
+        draw2DFace(pt2d, "");
         ax2 = gca;
         set(ax2, 'Position', [0.5, 0.05, 0.4, 0.9]);        
 
         title("KDTree Nearest Neighbours");
 
-        sample_path = ["2d_nearest_neighbours_images/", dataset_sub_directories(sub_dir), "/", file_name, ".png"];  
-        sample_path = join(sample_path, '');
+        sample_path = join(["images/2d_nearest_neighbours_images/", file_name, ".png"], '');
         exportgraphics(fig, sample_path, 'Resolution', 300);        
         
         disp(sample_path);
-        disp(fileIndex);        
+        disp(fileIndex);  
+        
+        if(fileIndex == 5)
+            disp("5 done");
+            saveKDTreeResultMinMean_CSV(summary, summary_path);
+            return; 
+        end
                 
     end    
     

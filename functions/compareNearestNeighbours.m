@@ -1,94 +1,136 @@
-function compareNearestNeighbours(sub_dir, no_of_figs, no_of_examples) 
+function compareNearestNeighbours(fileIndex)
+
+    load("mat_files/kd_tree_data.mat");
+    load("mat_files/pathMatrix.mat");
+    load('model/Model_Shape_Sim.mat');
+    
+    Mdl = KDTreeSearcher(kdtree);
+
+    fileNames = getDatasetFiles("dataset/AFLW2000/2D_dataset_normalized/"); 
+       
+%     numel(fileNames)
+%     for fileIndex = start_index:end_index
+
+    fprintf("Sample Image Index: %d\n", fileIndex);
+
+    [pathstr, file_name, ext] = fileparts(fileNames{fileIndex});
+
+    errors = [];
+
+    errors_p = [];
+
+    % [Idx, D, gt_path] = getNearestNeighbours(sub_dir, fileIndex, k);
+
+    load(join(["dataset/AFLW2000/2D_dataset_normalized/", fileNames{fileIndex}], '')); 
+
+    Y = M(:)';
+
+    gt_path = join(["dataset/AFLW2000/3d_dataset_gt/", fileNames{fileIndex}], '');       
+    load(gt_path);            
+    gt_pt3d = pt3d_68;
+
+    % Reflection matrix for reflecting around the x-axis
+    Rx = [1, 0, 0; 0, -1, 0; 0, 0, -1]; 
+
+    % Perform the reflection
+    % pt3d = Rx * pt3d;
+    gt_pt3d = Rx * gt_pt3d;
+    
+    % Reflect around y-axis
+    gt_pt3d(1, :) = -gt_pt3d(1, :); 
+
+    %gt_pt3d = pt3d;    
+    gt_pt3d = normalizeTranslate3D(gt_pt3d);
+    gt_pt3d = normalizeOrientation3D(gt_pt3d);  
+    % gt_pt3d = normalizeScale3D(gt_pt3d);     
+    % gt_pt3d = normalizeTranslate3D(gt_pt3d); 
+
+    averageLandmarksArr = [];
+    gt_pt3dArr = [];
+
+    fprintf("Finding Nearest Neighbours:\n");
+    k_s = [];
+    k_sc = [];
  
-    global dataset_sub_directories;   
+    for i=5:9
 
-    load("kd_tree_data.mat");
-    load("pathMatrix.mat");
+        k = 2^i;
+        k_s = [k_s, k];
+        k_sc = [k_sc, {k}];
 
-    parent_dir = "2d_dataset/"; 
-    path = join([parent_dir, dataset_sub_directories(sub_dir), "/"], '');
-    fileNames = getDatasetFiles(path); 
+        fprintf("K: %d\n", k);
+
+        [Idx, D] = knnsearch(Mdl, Y, 'K', k);
+
+        averageLandmarks = computeAverage_3DFaces(k, Idx, pathMatrix);          
+
+        averageLandmarksArr = [averageLandmarksArr, {averageLandmarks}];
+        
+        gt_pt3dArr = [gt_pt3dArr, {gt_pt3d}];
+
+        [errPrJnts, errPrFr, errPrAllFr] = H_errorHumanEva(averageLandmarks, gt_pt3d);        
+
+        errors = [errors, {errPrAllFr}];            
+        
+        errors_p = [errors_p, errPrAllFr];
+
+    end
+
+    fprintf("Saving .mat file..\n");        
+    summary = [k_sc' averageLandmarksArr' gt_pt3dArr' errors'];        
+    sample_path = join(["results/3D_AVG_GT_Compare/AFLW2000/", file_name, ".mat"], '');
+    save(sample_path,"summary");   
     
-    overall_errors = [];
-    
-    for fileIndex = 1:numel(fileNames)
-        
-        disp(fileIndex);
-        
-        file = cell2mat(fileNames(fileIndex));   
-        
-        [pathstr, file_name, ext] = fileparts(file);
-
-        errors = [];
-
-        for i=1:10
-
-            k = 2^i;
-
-            [Idx, D, gt_path] = getNearestNeighbours(sub_dir, fileIndex, k);
-
-            averageLandmarks = computeAverage_3DFaces(k, Idx, pathMatrix);          
-            
-            pt3d = get3DOriginalLandmarks(gt_path);            
-
-            gt_pt3d = pt3d;    
-            gt_pt3d = normalizeTranslate3D(gt_pt3d);
-            gt_pt3d = normalizeOrientation3D(gt_pt3d);  
-            gt_pt3d = normalizeScale3D(gt_pt3d);     
-            gt_pt3d = normalizeTranslate3D(gt_pt3d);               
-
-            [errPrJnts, errPrFr, errPrAllFr] = H_errorHumanEva(averageLandmarks, gt_pt3d);        
-
-            errors = [errors, errPrAllFr];
-
-        end
-
-        disp(gt_path);
-        
-        overall_errors = [overall_errors; errors];
-        
-        if fileIndex <= no_of_figs
-
-            fig = figure('Name', gt_path, 'Visible', 'off');
-            figWidth = 1100;
-            figHeight = 500;
-            set(fig, 'Position', [100, 100, figWidth, figHeight]);
-
-            subplot(1, 2, 1);
-            plot(errors,'--rs','LineWidth',2,...
-                           'MarkerEdgeColor','k',...
-                           'MarkerFaceColor','g',...
-                           'MarkerSize',8)
-
-            xlabel('k = 2^x');
-            ylabel('Errors');
-            title('Errors vs. k = 2^x');
-            grid on; 
-
-            subplot(1, 2, 2);
-
-            % black = GT, red = Avg. NN
-            compare3DFace(gt_pt3d, averageLandmarks);
-
-            sample_path = join(["3D_AVG_GT_Compare/", dataset_sub_directories(sub_dir), "/", file_name, ".png"], '');
-            exportgraphics(fig, sample_path, 'Resolution', 300);  
-            
-        end
-        
-        if fileIndex > no_of_examples
-        
-            disp("Closed.");
-            return;
-
-        end
-
-    end 
-    
-    errors_path = join(["3D_AVG_GT_Compare/", dataset_sub_directories(sub_dir), "/overall_errors"], '');
-    save(errors_path,"overall_errors");
     
 
+    % ==============================================================
+    fprintf("Generating Image..\n");
+    fig = figure('Name', gt_path, 'Visible', 'off'); % 
+    figWidth = 1100;
+    figHeight = 500;
+    set(fig, 'Position', [100, 100, figWidth, figHeight]);
 
+    subplot(1, 2, 1);
+    plot(k_s, errors_p,'--rs','LineWidth',2,...
+                   'MarkerEdgeColor','k',...
+                   'MarkerFaceColor','g',...
+                   'MarkerSize',8)
+
+    xlabel('k');
+    ylabel('Errors');
+    title('Errors vs. k');
+    grid on; 
+
+    subplot(1, 2, 2);
+
+    % black = GT, red = Avg. NN
+    compare3DFace(gt_pt3d, averageLandmarks, "comparison");
+
+    sample_path = join(["results/3D_AVG_GT_Compare/AFLW2000/", file_name, ".png"], '');
+    exportgraphics(fig, sample_path, 'Resolution', 300);  
+
+    
+    
+    
+    fprintf("Completed.\n");
+    return;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    % ==============================================================
+     
     fig = figure('Name', 'Errors'); 
     figWidth = 1600;
     figHeight = 1050;
@@ -128,7 +170,7 @@ function compareNearestNeighbours(sub_dir, no_of_figs, no_of_examples)
         
     end
  
-    sample_path = join(["3D_AVG_GT_Compare/", dataset_sub_directories(sub_dir), "/", "errors", ".png"], '');
+    sample_path = join(["3D_AVG_GT_Compare/AFLW2000/errors.png"], '');
     exportgraphics(fig, sample_path, 'Resolution', 300);
 
 

@@ -1,6 +1,10 @@
 function [kdtree, pathMatrix] = getProjectionsMatrixForKDTree()
 
-    global dataset_sub_directories ;
+    global dataset_sub_directories ...
+        angles ...
+        x_angles ...
+        y_angles ...
+        directions ;
   
     kdtree = [];
     
@@ -10,7 +14,7 @@ function [kdtree, pathMatrix] = getProjectionsMatrixForKDTree()
     
     for sub_dir = 1:numel(dataset_sub_directories)
     
-        path = join(["projected_2d_dataset/", dataset_sub_directories(sub_dir), "/"], '');
+        path = join(["dataset/projected_2d_dataset/", dataset_sub_directories(sub_dir), "/"], '');
 
         fileNames = getDatasetFiles(path); 
         
@@ -18,9 +22,9 @@ function [kdtree, pathMatrix] = getProjectionsMatrixForKDTree()
     
             sample_name = cell2mat(fileNames(file));    
             
-            projection_2d_sample_path = join(["projected_2d_dataset/", dataset_sub_directories(sub_dir), "/", sample_name], '');         
+            projection_2d_sample_path = join(["dataset/projected_2d_dataset/", dataset_sub_directories(sub_dir), "/", sample_name], '');         
 
-            pt3d_sample_path = join(["3d_normalized_dataset/", dataset_sub_directories(sub_dir), "/", sample_name], '');         
+            pt3d_sample_path = join(["dataset/3d_dataset_normalized/", dataset_sub_directories(sub_dir), "/", sample_name], '');         
             
             load(projection_2d_sample_path);
 
@@ -32,12 +36,19 @@ function [kdtree, pathMatrix] = getProjectionsMatrixForKDTree()
 
             proj_matrix = [];
             
-            for p = 1:numel(C_flat_filtered)
-                D = C_flat_filtered{p}';                                
-                proj_matrix = [proj_matrix; D(:)'];
-                pathMatrix = [pathMatrix; pt3d_sample_path];
+%             numel(C_flat_filtered)            
+            for p = 1:numel(x_angles)
+                D = C_flat_filtered{p}';
+                proj_matrix = [proj_matrix; D(:)'];                                
+                pathMatrix = [pathMatrix; pt3d_sample_path, directions(1), x_angles(p)];
             end
-
+            
+            for p = numel(x_angles)+1:numel(x_angles)+numel(y_angles)
+                D = C_flat_filtered{p}';
+                proj_matrix = [proj_matrix; D(:)'];                                
+                pathMatrix = [pathMatrix; pt3d_sample_path, directions(2), y_angles(p-numel(x_angles))];
+            end
+            
             kdtree = [kdtree; proj_matrix];
             
             count = count + 1;

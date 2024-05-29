@@ -1,9 +1,8 @@
 function  generateNormalized3DDataset(sub_dir)
 
-    global dataset_path ...
-        dataset_sub_directories;        
+    global dataset_sub_directories;        
 
-    path = join([dataset_path, dataset_sub_directories(sub_dir), "/"], '');
+    path = join(["dataset/3d_dataset_gt/", dataset_sub_directories(sub_dir), "/"], '');
     
     fileNames = getDatasetFiles(path);
 
@@ -19,12 +18,12 @@ function  generateNormalized3DDataset(sub_dir)
 
         pt3d = zeroOneNormalize3D(pt3d);  
 
-        path = join(['3d_normalized_dataset/' dataset_sub_directories(sub_dir) '/' sample_name], '');
+        path = join(['dataset/3d_dataset_normalized/' dataset_sub_directories(sub_dir) '/' sample_name], '');
 
         save(path,"pt3d"); 
 
-        disp(fileIndex);             
-
+        disp(fileIndex);          
+        
     end
     
     disp("Completed");

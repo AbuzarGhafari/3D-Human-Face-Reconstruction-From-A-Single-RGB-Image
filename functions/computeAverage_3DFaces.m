@@ -1,15 +1,17 @@
-function averageLandmarks = computeAverage_3DFaces(k, Idx, pathMatrix)
-
+function averageLandmarks = computeAverage_3DFaces(k, Idx)
+    
+    load("mat_files/pathMatrix.mat");
+    
     PM = [];
+    
     for i=1:k 
-        pth = pathMatrix(Idx(i)); 
-        newPth = replace(pth, "3d_normalized_dataset", "3d_dataset");
-        pt3d = get3DOriginalLandmarks(newPth);        
         
+        pth = pathMatrix(Idx(i)); 
+        newPth = replace(pth, "3d_dataset_normalized", "3d_dataset_gt");
+        
+        pt3d = get3DOriginalLandmarks(newPth);                
         pt3d = normalizeTranslate3D(pt3d);
-        pt3d = normalizeOrientation3D(pt3d); 
-        pt3d = normalizeScale3D(pt3d);   
-        pt3d = normalizeTranslate3D(pt3d);     
+        pt3d = normalizeOrientation3D(pt3d);   
 
         PM = [PM; {pt3d}]; 
     end

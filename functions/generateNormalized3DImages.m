@@ -1,9 +1,8 @@
 function  generateNormalized3DImages(sub_dir)
 
-    global dataset_path ...
-        dataset_sub_directories;        
+    global dataset_sub_directories;        
 
-    parent_dir = "3d_normalized_dataset/";
+    parent_dir = "dataset/3d_dataset_normalized/";
     path = join([parent_dir, dataset_sub_directories(sub_dir), "/"], '');
     fileNames = getDatasetFiles(path);
 
@@ -28,11 +27,11 @@ function  generateNormalized3DImages(sub_dir)
         subplot(1, 2, 2);     
         draw3DFace(npt3d, "3D - Normalized");
 
-        path = join(['3d_normalized_images/' dataset_sub_directories(sub_dir) '/' sample_name '.png'], '');
+        path = join(['images/3d_normalized_images/' dataset_sub_directories(sub_dir) '/' sample_name '.png'], '');
         saveas(hFig, path);
         close(hFig);
 
-        disp(fileIndex);
+        disp(fileIndex);        
 
     end
         

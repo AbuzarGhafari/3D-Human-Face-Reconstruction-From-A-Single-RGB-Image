@@ -1,4 +1,4 @@
-function draw2DFace(pt2d, t, color)
+function draw2DFace(pt2d, t)
 
 x = pt2d(1,:);
 y = pt2d(2,:);
@@ -7,35 +7,35 @@ y = pt2d(2,:);
 hold on;
 
 % face
-draw2DLine(x, y, 1, 17, color);
+draw2DLine(x, y, 1, 17, 'red');
 
 % Left Eye Brow
-draw2DLine(x, y, 18, 22, color);
+draw2DLine(x, y, 18, 22, 'black');
 % Right Eye Brow
-draw2DLine(x, y, 23, 27, color);
+draw2DLine(x, y, 23, 27, 'black');
 
 % Nose 
-draw2DLine(x, y, 28, 36, color);
+draw2DLine(x, y, 28, 36, 'blue');
 
 
-nose_index = 31;
-scatter(pt2d(1,nose_index),...
-            pt2d(2,nose_index),... 
-            'MarkerEdgeColor',"r", ...
-            'MarkerFaceColor',"k",...
-            'LineWidth',1);
+% nose_index = 31;
+% scatter(pt2d(1,nose_index),...
+%             pt2d(2,nose_index),... 
+%             'MarkerEdgeColor',"r", ...
+%             'MarkerFaceColor',"k",...
+%             'LineWidth',1);
         
 % Add the label to the plot
 % text(pt2d(1,nose_index), pt2d(2,nose_index), num2str([pt2d(1,nose_index), pt2d(2,nose_index)]), 'FontSize', 12, 'FontWeight', 'bold');
 
  
 % Left Eye
-draw2DLineCircle(x, y, 37, 42, color);
+draw2DLineCircle(x, y, 37, 42, 'black');
 % Right Eye
-draw2DLineCircle(x, y, 43, 48, color);
+draw2DLineCircle(x, y, 43, 48, 'black');
   
 % Lips
-draw2DLineCircle(x, y, 49, 68, color);
+draw2DLineCircle(x, y, 49, 68, 'blue');
  
 % Landmark Points
 % scatter(x,y,'MarkerEdgeColor',"r",...
@@ -52,7 +52,19 @@ set(gcf, 'Color', 'white');
 % set(gca, 'YDir','reverse');
 
 grid on;
- 
+
+scatter(pt2d(1,:),...
+            pt2d(2,:), 15 ,... 
+            'MarkerEdgeColor',"r", ...
+            'MarkerFaceColor',"k",...
+            'LineWidth',1);
+        
+        
+% scatter(pt2d(1,:),...
+%             pt2d(2,:), 20, 'MarkerEdgeColor',[0 0 0],...
+%               'MarkerFaceColor',[0 .7 .7 ],...
+%               'LineWidth',0.5);
+%  
 % axis off;
 % hold off; 
 end

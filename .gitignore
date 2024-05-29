@@ -1,23 +1,10 @@
-3d_dataset/HELEN/
-3d_dataset/AFW/
-3d_dataset/LFPW/ 
-
-300W_LP/
-3D_AVG_GT_Compare/
-3d_normalized_images/
-3d_normalized_dataset/
-2d_projected_images/
-2d_nearest_neighbours_images/
-
-projected_2d_dataset/HELEN/
-projected_2d_dataset/LFPW/
-projected_2d_dataset/AFW/ 
-
-2d_dataset/
-
 *.asv
 
 *.png
+
+*.jpg
+
+*.csv
 
 *.mat
 
