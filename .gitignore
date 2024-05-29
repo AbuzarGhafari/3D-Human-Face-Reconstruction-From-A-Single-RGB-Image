@@ -1,12 +1,12 @@
-3DFR\
+3DFR/
 
-dataset\
+dataset/
 
-images\
+images/
 
-mat_files\
+mat_files/
 
-results\
+results/
 
 
 *.asv
