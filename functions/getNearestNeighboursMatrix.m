@@ -1,6 +1,6 @@
-function [nn_matrix, DA, Idx] = getNearestNeighboursMatrix(pt2d, k)
+function [nn_matrix, DA, Idx] = getNearestNeighboursMatrix(kdtree, pt2d, k)
 
-    load("mat_files/kd_tree_data.mat");    
+%     load("mat_files/kd_tree_data.mat");    
     load("mat_files/pathMatrix.mat");
  
     Mdl = KDTreeSearcher(kdtree);
@@ -14,7 +14,7 @@ function [nn_matrix, DA, Idx] = getNearestNeighboursMatrix(pt2d, k)
     for i=1:k 
         pth = pathMatrix(Idx(i)); 
         DA = [DA; pathMatrix(Idx(i), 2), pathMatrix(Idx(i), 3)];
-        newPth = replace(pth, "3d_dataset_normalized", "3d_dataset_gt");
+        newPth = replace(pth, "3d_dataset_normalized", "300W-3D/3d_dataset_gt");
         
         pt3d = get3DOriginalLandmarks(newPth);                
         pt3d = normalizeTranslate3D(pt3d);

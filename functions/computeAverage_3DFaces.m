@@ -7,7 +7,7 @@ function averageLandmarks = computeAverage_3DFaces(k, Idx)
     for i=1:k 
         
         pth = pathMatrix(Idx(i)); 
-        newPth = replace(pth, "3d_dataset_normalized", "3d_dataset_gt");
+        newPth = replace(pth, "3d_dataset_normalized", "300W-3D/3d_dataset_gt");
         
         pt3d = get3DOriginalLandmarks(newPth);                
         pt3d = normalizeTranslate3D(pt3d);

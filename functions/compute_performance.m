@@ -1,6 +1,6 @@
-function [errors, mean_error, all_errors] =   compute_performance()
+function [errors, mean_error, all_errors] =   compute_performance(path)
 
-fileNames = getDatasetFiles("results/optimization-3/AFLW/"); 
+fileNames = getDatasetFiles(path); 
 
 all_errors = [];
 yaw_class_1 = [];
@@ -8,9 +8,9 @@ yaw_class_2 = [];
 yaw_class_3 = [];
 
 for fileIndex = 1:numel(fileNames)
-    load(join(["results/optimization-3/AFLW/" fileNames{fileIndex}], ''));       
+    load(join([path fileNames{fileIndex}], ''));       
     
-    fprintf("%d: %s\n", fileIndex, join(["results/optimization-3/AFLW/" fileNames{fileIndex}], ''));
+%     fprintf("%d: %s\n", fileIndex, join([path fileNames{fileIndex}], ''));
     
     res.op_error = result.op_error;
     res.yaw_class = result.yaw_class_id;
@@ -43,10 +43,11 @@ end
 
 errors = [];
 
-errors = [errors; round(sum(yaw_class_1)/numel(yaw_class_1)*100, 2)];
-errors = [errors; round(sum(yaw_class_2)/numel(yaw_class_2)*100, 2)];
-errors = [errors; round(sum(yaw_class_3)/numel(yaw_class_3)*100, 2)];
+errors = [errors; sum(yaw_class_1)/numel(yaw_class_1)*100];
+errors = [errors; sum(yaw_class_2)/numel(yaw_class_2)*100];
+errors = [errors; sum(yaw_class_3)/numel(yaw_class_3)*100];
 
+errors = errors(~isnan(errors));
 mean_error = round(sum(errors)/numel(errors), 2);
 
 % Display results

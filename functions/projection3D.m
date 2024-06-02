@@ -1,4 +1,4 @@
-function [projectedPoints] = projection3D(vertices, direction, angle, p, ex, ey)
+function [projectedPoints] = projection3D(vertices, direction, angle)
 
     if direction == 'x'
         % Ensure the rotation angles are within the allowed ranges
@@ -13,9 +13,7 @@ function [projectedPoints] = projection3D(vertices, direction, angle, p, ex, ey)
         R = [cos(angle), 0, sin(angle); 0, 1, 0; -sin(angle), 0, cos(angle)];
     end
     
-    projectionMatrix = [1, 0, 0; 0, 1, 0];
-    
-    intrinsic_matrix = [p, 0, ex; 0, p, ey; 0, 0, 1];
+    projectionMatrix = [1, 0, 0; 0, 1, 0];    
 
 %     % Apply rotations
     rotatedVertices =  (R * vertices);

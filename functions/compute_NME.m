@@ -1,8 +1,8 @@
-function NME = compute_NME(estimated_3d, gt_3d,  dir, angle, p, ex, ey)
+function NME = compute_NME(estimated_3d, gt_3d,  dir, angle)
 
 
 % Project to 2D (for bounding box calculation)
-landmarks_2d = projection3D(estimated_3d, dir, angle, p, ex, ey)';
+landmarks_2d = projection3D(estimated_3d, dir, angle)';
 x_coords_gt = landmarks_2d(1, :);
 y_coords_gt = landmarks_2d(2, :);
 
